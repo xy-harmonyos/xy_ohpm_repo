@@ -6,7 +6,7 @@ ARG version=1.0
 LABEL name="xy_base"
 LABEL version="${version}"
 LABEL description="xy_base"
-ENV xy_base "${version}"
+ENV xy_base="${version}"
 ARG username="xy_base"
 ARG password="abc1236547890"
 ARG groupname="xy_base"
@@ -53,13 +53,13 @@ COPY --chown=xy_base:xy_base ./install/ohpm-repo-5.0.7.0.zip /opt/install_work/p
 RUN mkdir -p ~/ohpm-repo
 RUN unzip -d ~/ohpm-repo /opt/install_work/packages/ohpm-repo-5.0.7.0.zip
 
-ENV PATH /home/${username}/ohpm-repo/bin:$PATH
+ENV PATH=/home/${username}/ohpm-repo/bin:$PATH
 
 RUN export
 
 RUN source ~/.nvm/nvm.sh && ohpm-repo install
 
-ENV OHPM_REPO_DEPLOY_ROOT /home/${username}/ohpm-repo
+ENV OHPM_REPO_DEPLOY_ROOT=/home/${username}/ohpm-repo
 
 RUN source ~/.zshrc
 
