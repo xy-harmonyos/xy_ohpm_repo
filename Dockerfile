@@ -15,8 +15,8 @@ ENV TZ=Asia/Shanghai
 RUN apt update
 RUN apt -y upgrade
 RUN apt install -y ca-certificates
-RUN sed -i "s@http://.*archive.ubuntu.com@https://mirrors.tuna.tsinghua.edu.cn@g" /etc/apt/sources.list
-RUN sed -i "s@http://.*security.ubuntu.com@https://mirrors.tuna.tsinghua.edu.cn@g" /etc/apt/sources.list
+RUN sed -i "s@http://.*archive.ubuntu.com@https://mirrors.tuna.tsinghua.edu.cn@g" /etc/apt/sources.list.d/ubuntu.sources
+RUN sed -i "s@http://.*security.ubuntu.com@https://mirrors.tuna.tsinghua.edu.cn@g" /etc/apt/sources.list.d/ubuntu.sources
 RUN apt update
 RUN apt -y upgrade
 RUN apt-get -yq install tzdata
@@ -26,8 +26,7 @@ RUN groupadd ${groupname}
 RUN useradd --create-home --no-log-init --shell /bin/bash -m ${username} -g ${groupname} -d /home/${username} && echo "${username}:${password}" | chpasswd
 RUN usermod -a -G sudo ${username}
 
-USER root
-RUN apt install -y curl wget systemctl python3 python3-pip zsh vim git make llvm clang pkg-config
+RUN apt install -y curl wget systemctl python3 python3-pip zsh vim git make llvm clang pkg-config zip
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime
 RUN dpkg-reconfigure -f noninteractive tzdata
 
@@ -50,14 +49,22 @@ RUN echo 'export NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.
 RUN echo 'export NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.nvm" || printf %s "${XDG_CONFIG_HOME}/nvm")"\n[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"' >> ${HOME}/.bash_profile
 RUN echo 'export NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.nvm" || printf %s "${XDG_CONFIG_HOME}/nvm")"\n[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"' >> ${HOME}/.profile
 
-RUN source ~/.nvm/nvm.sh && nvm help
-RUN source ~/.nvm/nvm.sh && npm help
+COPY --chown=xy_base:xy_base ./install/ohpm-repo-5.0.7.0.zip /opt/install_work/packages/ohpm-repo-5.0.7.0.zip
+RUN mkdir -p ~/ohpm-repo
+RUN unzip -d ~/ohpm-repo /opt/install_work/packages/ohpm-repo-5.0.7.0.zip
 
-ARG SOURCEPATH "/xy_base"
+ENV PATH /home/${username}/ohpm-repo/bin:$PATH
 
-VOLUME ["/xy_base"]
+RUN export
 
+RUN source ~/.nvm/nvm.sh && ohpm-repo install
 
+ENV OHPM_REPO_DEPLOY_ROOT /home/${username}/ohpm-repo
 
+RUN source ~/.zshrc
 
-ENTRYPOINT ["tail", "-f", "/dev/null"]
+EXPOSE 8088
+
+ENTRYPOINT ["/bin/zsh", "-c", "source ~/.nvm/nvm.sh && ohpm-repo start"]
+
+# ENTRYPOINT ["tail", "-f", "/dev/null"]
