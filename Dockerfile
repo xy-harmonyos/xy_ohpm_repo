@@ -2,7 +2,7 @@
 ARG os_version=24.04
 FROM ubuntu:${os_version}
 
-ARG version=1.0
+ARG version=0.0.1
 LABEL name="xy_base"
 LABEL version="${version}"
 LABEL description="xy_base"
@@ -20,13 +20,11 @@ RUN sed -i "s@http://.*security.ubuntu.com@https://mirrors.tuna.tsinghua.edu.cn@
 RUN apt update
 RUN apt -y upgrade
 RUN apt-get -yq install tzdata
-RUN apt install -y sudo
-RUN apt install -y bash
+RUN apt install -y sudo bash zsh curl wget systemctl python3 python3-pip vim git make llvm clang pkg-config zip
 RUN groupadd ${groupname}
 RUN useradd --create-home --no-log-init --shell /bin/bash -m ${username} -g ${groupname} -d /home/${username} && echo "${username}:${password}" | chpasswd
 RUN usermod -a -G sudo ${username}
 
-RUN apt install -y curl wget systemctl python3 python3-pip zsh vim git make llvm clang pkg-config zip
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime
 RUN dpkg-reconfigure -f noninteractive tzdata
 
