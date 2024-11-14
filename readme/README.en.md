@@ -25,14 +25,22 @@ XiYang open source software package operating environment.
 
 ```bash
 # bash
-docker pull yuyangit/xy_ohpm_repo:0.0.1
+docker pull yuyangit/xy_ohpm_repo:latest
 ```
 
 ## How to use
 
+1. Build mirror
+
+```bash
+./build.sh
+```
+
+2. Run the container directly
+
 ```bash
 # bash
-docker run -itd --privileged --restart always --name xy_base -v <宿主路径>:<容器路径> yuyangit/xy_ohpm_repo:0.0.1
+docker run -itd --privileged --restart always --name xy_base -p 10015:8088 -v <host path>:<container path> yuyangit/xy_ohpm_repo:latest
 ```
 
 ## License
