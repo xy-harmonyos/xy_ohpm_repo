@@ -53,7 +53,7 @@ RUN unzip -d ~/ohpm-repo /opt/install_work/packages/ohpm-repo-5.0.7.0.zip
 
 ENV PATH=/home/${username}/ohpm-repo/bin:$PATH
 
-RUN export
+RUN python3 -c "from pathlib import Path;config_yaml = Path('/home/${username}/ohpm-repo/conf/config.yaml');config = config_yaml.read_text();new_config = config.replace('listen: localhost:8088','listen: 0.0.0.0:8088');config_yaml.write_text(new_config);"
 
 RUN source ~/.nvm/nvm.sh && ohpm-repo install
 
