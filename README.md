@@ -40,7 +40,7 @@ docker pull yuyangit/xy_ohpm_repo:latest
 
 ```bash
 # bash
-docker run -itd --privileged --restart always --name xy_base -p 10015:8088 -v <宿主路径>:<容器路径> yuyangit/xy_ohpm_repo:latest
+docker run -itd --privileged --restart always --name xy_ohpm_repo -p 10015:8088 yuyangit/xy_ohpm_repo:latest
 ```
 
 ## 许可证

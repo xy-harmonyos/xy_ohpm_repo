@@ -25,7 +25,7 @@
 
 ```bash
 # bash
-docker pull yuyangit/xy_ohpm_repo:0.0.1
+docker pull yuyangit/xy_ohpm_repo:latest
 ```
 
 ## 使用
@@ -41,7 +41,7 @@ docker pull yuyangit/xy_ohpm_repo:0.0.1
 
 ```bash
 # bash
-docker run -itd --privileged --restart always --name xy_base -p 10015:8088 -v <宿主路徑>:<容器路徑> yuyangit/xy_ohpm_repo:latest
+docker run -itd --privileged --restart always --name xy_ohpm_repo -p 10015:8088 yuyangit/xy_ohpm_repo:latest
 ```
 
 ## 許可證
